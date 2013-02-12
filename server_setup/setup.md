@@ -28,17 +28,13 @@ for i in {1..40}; do IP=$(nova show chef-server-$i |grep accessIPv4 | tr -s [:bl
 Chef-client
 
 #Create x chef clients based upon the saved chef-client instance
-For chef-client 10.12
-
 for i in {1..40}; do nova boot --image d897ea27-7781-4fb2-b12d-78d1f336006f --flavor 3 chef-client-$i; done
-
-For chef-client 10.20
-
-for i in {1..40}; do nova boot --image 5654b00d-a1b0-493f-8b5b-7cd93740ffc5 --flavor 3 chef-client-$i; done
-
 
 #Set the root password for each server
 for i in {1..40}; do ./nova-setpassword.exp chef-client-$i cheftrainingnode; done
 
 #Open port 80, 587, 3306, 443
 for i in {1..40}; do IP=$(nova show chef-client-$i |grep accessIPv4 | tr -s [:blank:] | cut -f 3 -d "|" | sed "s/ //" ); sshpass -p 'cheftrainingnode' ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@$IP 'iptables -I INPUT 4 -p tcp --dport 80 -j ACCEPT; iptables -I INPUT 4 -p tcp --dport 587 -j ACCEPT; iptables -I INPUT 4 -p tcp --dport 3306 -j ACCEPT; iptables -I INPUT 4 -p tcp --dport 443 -j ACCEPT; service iptables save'; done
+
+#To get a list of chef-server and client servers with ips:
+for i in {1..40}; do S_IP=$(nova show chef-server-$i |grep accessIPv4 | tr -s [:blank:] | cut -f 3 -d "|" | sed "s/ //" ); C_IP=$(nova show chef-client-$i |grep accessIPv4 | tr -s [:blank:] | cut -f 3 -d "|" | sed "s/ //" ); echo -e "$i \n\t $S_IP\n\t $C_IP\n\n"; done
