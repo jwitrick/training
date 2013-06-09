@@ -1,0 +1,18 @@
+In order to make this class a speedy as possible I have create a list of steps that can be followed to install chef on your local machine.
+ 
+Configuration steps for windows:
+ 
+1) Please download and install the chef msi: https://opscode-omnitruck-release.s3.amazonaws.com/windows/2008r2/x86_64/chef-client-10.20.0-1.windows.msi
+2) You need to make sure the following directories are added to your class path: C:\opscode\chef\embedded\bin and C:\opscode\chef\bin\
+3) Create a directory mkdir C:\Users\<your_username>\.chef
+ 
+Configuration steps on Linux / mac:
+1) Download  the install script: wget https://www.opscode.com/chef/install.sh
+2) chmod +x install.sh
+3) sudo ./install.sh -v 10.20.0-1
+ 
+ 
+To verify installation run:
+chef-client -v
+ 
+and you should see: it return 10.20
